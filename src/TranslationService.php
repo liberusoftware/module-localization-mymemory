@@ -19,7 +19,7 @@ final class TranslationService implements TranslationProvider
      *
      * @var array<string, string>
      */
-    public const array SUPPORTED_LANGUAGES = [
+    public const SUPPORTED_LANGUAGES = [
         'en' => 'English',
         'es' => 'Spanish',
         'fr' => 'French',
