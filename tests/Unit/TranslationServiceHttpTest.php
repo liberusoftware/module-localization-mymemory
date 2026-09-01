@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Liberu\Foundation\Localization\MyMemory\TranslationService;
 
-test('translation service translates text correctly', function () {
-    $service = new TranslationService();
+test('translation service translates text correctly', function (): void {
+    $service = new TranslationService;
 
     Http::fake([
         'api.mymemory.translated.net/*' => Http::response([
@@ -21,18 +21,18 @@ test('translation service translates text correctly', function () {
     expect($result)->toBe('Hola');
 });
 
-test('translation service returns original text if source and target are same', function () {
-    $service = new TranslationService();
+test('translation service returns original text if source and target are same', function (): void {
+    $service = new TranslationService;
 
     $result = $service->translate('Hello', 'en', 'en');
 
     expect($result)->toBe('Hello');
 });
 
-test('translation service uses cache', function () {
+test('translation service uses cache', function (): void {
     Cache::flush();
 
-    $service = new TranslationService();
+    $service = new TranslationService;
 
     Http::fake([
         'api.mymemory.translated.net/*' => Http::response([
@@ -58,22 +58,22 @@ test('translation service uses cache', function () {
     expect(Cache::has($cacheKey))->toBeTrue();
 });
 
-test('translation service returns original text when the API connection throws', function () {
+test('translation service returns original text when the API connection throws', function (): void {
     Cache::flush();
 
-    $service = new TranslationService();
+    $service = new TranslationService;
 
-    Http::fake(function () {
+    Http::fake(function (): void {
         throw new ConnectionException('offline');
     });
 
     expect($service->translate('Hello', 'es', 'en'))->toBe('Hello');
 });
 
-test('translation service handles API failures gracefully', function () {
+test('translation service handles API failures gracefully', function (): void {
     Cache::flush();
 
-    $service = new TranslationService();
+    $service = new TranslationService;
 
     Http::fake([
         'api.mymemory.translated.net/*' => Http::response([], 500),
@@ -85,8 +85,8 @@ test('translation service handles API failures gracefully', function () {
     expect($result)->toBe('Hello');
 });
 
-test('translation service can translate batch', function () {
-    $service = new TranslationService();
+test('translation service can translate batch', function (): void {
+    $service = new TranslationService;
 
     Http::fake([
         'api.mymemory.translated.net/*' => Http::response([
@@ -110,8 +110,8 @@ test('translation service can translate batch', function () {
     Http::assertSentCount(2);
 });
 
-test('translation service can check if language is supported', function () {
-    $service = new TranslationService();
+test('translation service can check if language is supported', function (): void {
+    $service = new TranslationService;
 
     expect($service->isLanguageSupported('en'))->toBeTrue();
     expect($service->isLanguageSupported('es'))->toBeTrue();
@@ -120,8 +120,8 @@ test('translation service can check if language is supported', function () {
     expect($service->isLanguageSupported('xx'))->toBeFalse();
 });
 
-test('translation service returns supported languages', function () {
-    $service = new TranslationService();
+test('translation service returns supported languages', function (): void {
+    $service = new TranslationService;
 
     $languages = $service->getSupportedLanguages();
 
